@@ -7,9 +7,13 @@ export class SendNumberController {
   constructor(private readonly sendNumberService: SendNumberService) {}
 
   @Post()
-  sendNumber(@Body('numbers') numbers: number[]) {
+  async sendNumber(@Body('numbers') numbers: number[]) {
     const validatedNumbers = this.sendNumberService.numberValidator(numbers);
 
-    return { numbers: validatedNumbers };
+    const savedNumbers = await this.sendNumberService.saveData(
+      validatedNumbers,
+    );
+
+    return { numbers: savedNumbers };
   }
 }
