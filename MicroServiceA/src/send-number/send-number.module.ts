@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 
 import { SendNumberController } from './send-number.controller';
+import { LastNumberController } from './last-number.controller';
 import { SendNumberService } from './send-number.service';
 import { DB_SERVICE } from './send-number.constants';
 
@@ -18,7 +19,7 @@ import { DB_SERVICE } from './send-number.constants';
       },
     ]),
   ],
-  controllers: [SendNumberController],
+  controllers: [SendNumberController, LastNumberController],
   providers: [SendNumberService],
 })
 export class SendNumberModule {}

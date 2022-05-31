@@ -12,8 +12,8 @@ export class SendNumberController {
   ) {}
 
   @Post()
-  async sendNumber(@Body('numbers') numbers: number[]) {
-    const pattern = { cmd: 'lastNumbers' };
+  async sendNumbers(@Body('numbers') numbers: number[]) {
+    const pattern = { cmd: 'sendNumbers' };
     const payload = this.sendNumberService.numberValidator(numbers);
 
     return this.client.send(pattern, payload);

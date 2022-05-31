@@ -7,9 +7,14 @@ export class LastNumbersController {
   constructor(private readonly lastNumberService: LastNumbersService) {}
 
   @MessagePattern({ cmd: 'lastNumbers' })
+  async getLastNumbers() {
+    return await this.lastNumberService.getData();
+  }
+
+  @MessagePattern({ cmd: 'sendNumbers' })
   async lastNumbers(data: number[]) {
     const savedNumbers = await this.lastNumberService.saveData(data);
 
-    return { numbers: savedNumbers };
+    return { lastNumbers: savedNumbers };
   }
 }
