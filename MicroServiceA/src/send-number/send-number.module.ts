@@ -1,17 +1,21 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 import { SendNumberController } from './send-number.controller';
 import { SendNumberService } from './send-number.service';
-
-import { Odd_numbersSchema, OddNumber } from './schemas/odd_numbers.schema';
-import { Even_numbersSchema, EvenNumber } from './schemas/even_numbers.schema';
+import { DB_SERVICE } from './send-number.constants';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([
-      { name: EvenNumber.name, schema: Even_numbersSchema },
-      { name: OddNumber.name, schema: Odd_numbersSchema },
+    ClientsModule.register([
+      {
+        name: DB_SERVICE,
+        transport: Transport.TCP,
+        options: {
+          host: '127.0.0.1',
+          port: 8877,
+        },
+      },
     ]),
   ],
   controllers: [SendNumberController],

@@ -1,19 +1,21 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Inject, Post } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
 
 import { SendNumberService } from './send-number.service';
+import { DB_SERVICE } from './send-number.constants';
 
 @Controller('send-number')
 export class SendNumberController {
-  constructor(private readonly sendNumberService: SendNumberService) {}
+  constructor(
+    @Inject(DB_SERVICE) private client: ClientProxy,
+    private readonly sendNumberService: SendNumberService,
+  ) {}
 
   @Post()
   async sendNumber(@Body('numbers') numbers: number[]) {
-    const validatedNumbers = this.sendNumberService.numberValidator(numbers);
+    const pattern = { cmd: 'lastNumbers' };
+    const payload = this.sendNumberService.numberValidator(numbers);
 
-    const savedNumbers = await this.sendNumberService.saveData(
-      validatedNumbers,
-    );
-
-    return { numbers: savedNumbers };
+    return this.client.send(pattern, payload);
   }
 }
